@@ -1,5 +1,7 @@
 package sweeper;
 
+import java.util.Objects;
+
 public class Coord {
     private int x;
     private int y;
@@ -23,5 +25,19 @@ public class Coord {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o instanceof Coord) {
+            Coord to = (Coord)o;
+            return to.getX() == this.x && to.getY() == this.y;
+        }
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y);
     }
 }

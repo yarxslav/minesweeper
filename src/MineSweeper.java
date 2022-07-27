@@ -3,20 +3,26 @@ import java.awt.*;
 
 import sweeper.Box;
 import sweeper.Coord;
+import sweeper.Game;
 import sweeper.Ranges;
 
 public class MineSweeper extends JFrame {
+
+    private Game game;
+
     private JPanel panel;
     private final int COLS = 9;
     private final int ROWS = 9;
     private final int IMAGE_SIZE = 50;
+    private final int BOMBS = 10;
 
     public static void main(String[] args) {
         new MineSweeper();
     }
 
     private MineSweeper() {
-        Ranges.setSize(new Coord(COLS, ROWS));
+        game = new Game(COLS, ROWS, BOMBS);
+        game.start();
         setImages();
         initPanel();
         initFrame();
@@ -29,7 +35,7 @@ public class MineSweeper extends JFrame {
                 super.paintComponent(g);
 
                 for(Coord  coord : Ranges.getAllCords()) {
-                    g.drawImage((Image) Box.values()[(coord.getX() + coord.getY()) %  Box.values().length].image,
+                    g.drawImage((Image) game.getBox(coord).image,
                             coord.getX() * IMAGE_SIZE, coord.getY() * IMAGE_SIZE, this);
                 }
             }
@@ -40,13 +46,13 @@ public class MineSweeper extends JFrame {
     }
 
     private void initFrame() {
-        pack();
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("MineSweeper");
         setLocationRelativeTo(null);
         setResizable(false);
         setVisible(true);
         setIconImage(getImage("icon"));
+        pack();
     }
 
     private void setImages() {
