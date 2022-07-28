@@ -29,15 +29,11 @@ public class Coord {
 
     @Override
     public boolean equals(Object o) {
-        if(o instanceof Coord) {
-            Coord to = (Coord)o;
-            return to.getX() == this.x && to.getY() == this.y;
+        if (o instanceof Coord) {
+            Coord to = (Coord) o;
+            return to.getX() == x && to.getY() == y;
         }
         return super.equals(o);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(x, y);
-    }
 }

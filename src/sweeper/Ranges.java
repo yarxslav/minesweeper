@@ -38,16 +38,12 @@ public class Ranges {
 
     static ArrayList<Coord> getCoordsAroundCoord(Coord coord) {
         Coord around;
-        ArrayList<Coord> list = new ArrayList<>();
-        for (int x = coord.getX() - 1; x <= coord.getX() + 1; x++) {
-            for (int y = coord.getY() - 1; y <= coord.getY() + 1; x++) {
-                if (inRange(around = new Coord(x, y))) {
-                    if (!around.equals(coord)) {
+        ArrayList<Coord> list = new ArrayList<Coord>();
+        for (int x = coord.getX() - 1; x <= coord.getX() + 1; x++)
+            for (int y = coord.getY() - 1; y <= coord.getY() + 1; x++)
+                if (inRange(around = new Coord(x, y)))
+                    if (!around.equals(coord))
                         list.add(around);
-                    }
-                }
-            }
-        }
 
         return list;
     }
