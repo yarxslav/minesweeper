@@ -5,46 +5,49 @@ import java.util.List;
 import java.util.Random;
 
 public class Ranges {
-    private static Coord size;
-    private static ArrayList<Coord> allCoords;
-    private static Random random = new Random();
 
-    static void setSize(Coord newSize) {
-        size = newSize;
-        allCoords = new ArrayList<Coord>();
-        for (int y = 0; y < size.getY(); y++) {
-            for (int x = 0; x < size.getX(); x++) {
-                allCoords.add(new Coord(x, y));
-            }
-        }
+    private static Coord size;
+    private static ArrayList<Coord> allCoordinates;
+    private static final Random random = new Random();
+
+    private Ranges() {
+        throw new IllegalStateException("Utility class");
+    }
+
+    public static void setSize(Coord size) {
+        Ranges.size = size;
+        allCoordinates = new ArrayList<>();
+        for (int y = 0; y < Ranges.size.y; y++)
+            for (int x = 0; x < Ranges.size.x; x++)
+                allCoordinates.add(new Coord(x, y));
     }
 
     public static Coord getSize() {
         return size;
     }
 
-    public static List<Coord> getAllCords() {
-        return allCoords;
+    public static List<Coord> getAllCoordinates() {
+        return allCoordinates;
     }
 
-    static boolean inRange(Coord coord) {
-        return coord.getX() >= 0 && coord.getX() < size.getX() &&
-                coord.getY() >= 0 && coord.getY() < size.getY();
+    public static boolean inRange(Coord coord) {
+        return coord.x >= 0 && coord.x < size.x &&
+                coord.y >= 0 && coord.y < size.y;
     }
 
-    static Coord getRandomCoord() {
-        return new Coord(random.nextInt(size.getX()), random.nextInt(size.getY()));
+    public static Coord getRandomCoordinates() {
+        return new Coord(random.nextInt(size.x), random.nextInt(size.y));
     }
 
-    static ArrayList<Coord> getCoordsAroundCoord(Coord coord) {
+    public static ArrayList<Coord> getCoordinatesAround(Coord coord) {
         Coord around;
-        ArrayList<Coord> list = new ArrayList<Coord>();
-        for (int x = coord.getX() - 1; x <= coord.getX() + 1; x++)
-            for (int y = coord.getY() - 1; y <= coord.getY() + 1; x++)
+        ArrayList<Coord> list = new ArrayList<>();
+        for (int x = coord.x - 1; x <= coord.x + 1; x++)
+            for (int y = coord.y - 1; y <= coord.y + 1; y++)
                 if (inRange(around = new Coord(x, y)))
                     if (!around.equals(coord))
                         list.add(around);
-
         return list;
     }
 }
+

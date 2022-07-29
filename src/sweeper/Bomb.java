@@ -11,9 +11,8 @@ class Bomb {
 
     void start() {
         bombMap = new Matrix(Box.ZERO);
-        for (int i = 0; i < totalBombs; i++) {
+        for (int j = 0; j < totalBombs; j++)
             placeBomb();
-        }
     }
 
     Box get(Coord coord) {
@@ -21,34 +20,30 @@ class Bomb {
     }
 
     private void fixBombsCount() {
-        int maxBombs = Ranges.getSize().getX() * Ranges.getSize().getY() / 2;
-        if (totalBombs  > maxBombs) {
+        int maxBombs = Ranges.getSize().x * Ranges.getSize().y / 2;
+        if (totalBombs > maxBombs)
             totalBombs = maxBombs;
-        }
     }
 
     private void placeBomb() {
         while (true) {
-            Coord coord = Ranges.getRandomCoord();
-            if (Box.BOMB == bombMap.get(coord)) {
+            Coord coord = Ranges.getRandomCoordinates();
+            if (Box.BOMB == bombMap.get(coord))
                 continue;
-            }
             bombMap.set(coord, Box.BOMB);
-            incNumbersAroundBomb(coord);
+            incNumbersRoundBomb(coord);
             break;
         }
-
     }
 
-    private void incNumbersAroundBomb(Coord coord) {
-        for (Coord around : Ranges.getCoordsAroundCoord(coord)) {
-            if (Box.BOMB != bombMap.get(coord)) {
+    private void incNumbersRoundBomb(Coord coord) {
+        for (Coord around : Ranges.getCoordinatesAround(coord))
+            if (Box.BOMB != bombMap.get(around))
                 bombMap.set(around, bombMap.get(around).getNextNumberBox());
-            }
-        }
     }
 
     int getTotalBombs() {
         return totalBombs;
     }
+
 }

@@ -1,45 +1,43 @@
 package sweeper;
 
 public class Game {
+    private final Bomb bomb;
+    private final Flag flag;
+    private GameState state;
 
-    private Bomb bomb;
-    private Flag flag;
-    private GameState gameState;
+    public GameState getState() {
+        return state;
+    }
 
-    public Game(int cols, int rows, int bombs) {
+    public Game(int cols, int rows, int daleks) {
         Ranges.setSize(new Coord(cols, rows));
-        bomb = new Bomb(bombs);
+        bomb = new Bomb(daleks);
         flag = new Flag();
     }
 
     public void start() {
         bomb.start();
         flag.start();
-        gameState = GameState.PLAYED;
+        state = GameState.PLAYED;
     }
 
+
     public Box getBox(Coord coord) {
-        if (flag.get(coord) == Box.OPENED) {
+        if (flag.get(coord) == Box.OPENED)
             return bomb.get(coord);
-        } else {
-            return flag.get(coord);
-        }
+        return flag.get(coord);
     }
 
     public void pressLeftButton(Coord coord) {
-        if (gameOver()) {
-            return;
-        }
+        if (gameOver()) return;
         openBox(coord);
         checkWinner();
     }
 
     private void checkWinner() {
-        if (gameState == GameState.PLAYED) {
-            if (flag.getCountOfClosedBoxes() == bomb.getTotalBombs()) {
-                gameState = GameState.WINNER;
-            }
-        }
+        if (state == GameState.PLAYED)
+            if (flag.getCountOfClosedBoxes() == bomb.getTotalBombs())
+                state = GameState.WINNER;
     }
 
     private void openBox(Coord coord) {
@@ -47,71 +45,66 @@ public class Game {
             case OPENED:
                 setOpenedToClosedBoxesAroundNumber(coord);
                 return;
+
             case FLAGED:
                 return;
+
             case CLOSED:
                 switch (bomb.get(coord)) {
                     case ZERO:
                         openBoxesAround(coord);
                         return;
+
                     case BOMB:
                         openBombs(coord);
                         return;
+
                     default:
                         flag.setOpenedToBox(coord);
-                        return;
                 }
         }
     }
 
-    void setOpenedToClosedBoxesAroundNumber (Coord coord) {
-        if (bomb.get(coord) != Box.BOMB) {
-            if (flag.getCountOfFlagedBoxesAround(coord) == bomb.get(coord).getNumber()) {
-                for (Coord around : Ranges.getCoordsAroundCoord(coord)) {
-                    if (flag.get(around) == Box.CLOSED) {
+    void setOpenedToClosedBoxesAroundNumber(Coord coord) {
+        if (bomb.get(coord) != Box.BOMB)
+            if (flag.getCountOfFlaggedBoxesAround(coord) == bomb.get(coord).getNumber())
+                for (Coord around : Ranges.getCoordinatesAround(coord))
+                    if (flag.get(around) == Box.CLOSED)
                         openBox(around);
-                    }
-                }
-            }
-        }
-
     }
 
-    private void openBombs(Coord bombed) {
-        gameState = GameState.BOMBED;
-        flag.setBombedToBox(bombed);
-        for (Coord coord : Ranges.getAllCords()) {
-            if (bomb.get(coord) == Box.BOMB) {
+    private void openBombs(Coord exterminated) {
+        state = GameState.BOMBED;
+        flag.setShowedBombsToBox(exterminated);
+        for (Coord coord : Ranges.getAllCoordinates())
+            if (bomb.get(coord) == Box.BOMB)
                 flag.setOpenedToClosedBombBox(coord);
-            } else {
-                flag.setNoBombToFlagedSafeBox(coord);
-            }
-        }
+            else
+                flag.setNoBombToFlaggedSafeBox(coord);
+
     }
 
     private void openBoxesAround(Coord coord) {
         flag.setOpenedToBox(coord);
-        for (Coord around : Ranges.getCoordsAroundCoord(coord)) {
+        for (Coord around : Ranges.getCoordinatesAround(coord))
             openBox(around);
-        }
     }
 
     public void pressRightButton(Coord coord) {
-        if (gameOver()) {
-            return;
-        }
-        flag.toggleFlagedToBox(coord);
+        if (gameOver()) return;
+        flag.toggleFlaggedToBox(coord);
     }
 
     private boolean gameOver() {
-        if (gameState == GameState.PLAYED) {
+        if (state == GameState.PLAYED)
             return false;
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
         start();
         return true;
     }
-
-    public GameState getGameState() {
-        return gameState;
-    }
 }
+

@@ -1,27 +1,22 @@
 package sweeper;
 
 class Matrix {
-    private Box[][] matrix;
+    private final Box[][] gameMatrix;
 
     Matrix(Box defaultBox) {
-        matrix = new Box[Ranges.getSize().getX()][Ranges.getSize().getY()];
-        for(Coord coord : Ranges.getAllCords()) {
-            matrix[coord.getX()][coord.getY()] = defaultBox;
-        }
+        gameMatrix = new Box[Ranges.getSize().x][Ranges.getSize().y];
+        for (Coord coord : Ranges.getAllCoordinates())
+            gameMatrix[coord.x][coord.y] = defaultBox;
     }
 
     Box get(Coord coord) {
-        if(Ranges.inRange(coord)) {
-            return matrix[coord.getX()][coord.getY()];
-        } else {
-            return null;
-        }
-
+        if (Ranges.inRange(coord))
+            return gameMatrix[coord.x][coord.y];
+        else return null;
     }
 
     void set(Coord coord, Box box) {
-        if(Ranges.inRange(coord)) {
-            matrix[coord.getX()][coord.getY()] = box;
-        }
+        if (Ranges.inRange(coord))
+            gameMatrix[coord.x][coord.y] = box;
     }
 }

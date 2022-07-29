@@ -44,9 +44,9 @@ public class MineSweeper extends JFrame {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
 
-                for (Coord coord : Ranges.getAllCords()) {
+                for (Coord coord : Ranges.getAllCoordinates()) {
                     g.drawImage((Image) game.getBox(coord).image,
-                            coord.getX() * IMAGE_SIZE, coord.getY() * IMAGE_SIZE, this);
+                            coord.x * IMAGE_SIZE, coord.y * IMAGE_SIZE, this);
                 }
             }
         };
@@ -70,20 +70,21 @@ public class MineSweeper extends JFrame {
                 panel.repaint();
             }
         });
-        panel.setPreferredSize(new Dimension(Ranges.getSize().getX() * IMAGE_SIZE,
-                Ranges.getSize().getY() * IMAGE_SIZE));
+        panel.setPreferredSize(new Dimension(Ranges.getSize().x * IMAGE_SIZE,
+                Ranges.getSize().y * IMAGE_SIZE));
         add(panel);
     }
 
     private String getMessage() {
-        switch (game.getGameState()) {
+        switch (game.getState()) {
             case PLAYED:
                 return "Think twice";
             case BOMBED:
                 return "YOU LOSE! BIG BA-DA-BOOM!";
             case WINNER:
                 return "Congrats, comrade!";
-            default: return "";
+            default:
+                return "";
         }
     }
 
